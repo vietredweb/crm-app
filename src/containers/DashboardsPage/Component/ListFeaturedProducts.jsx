@@ -70,7 +70,7 @@ const ListFeaturedProducts = observer((props) => {
                 },
               },
               {
-                Header: t('txt_categories'),
+                Header: t('txt_companies'),
                 accessor: 'categories',
                 className: 'py-2 text-gray border-bottom-1 text-uppercase fw-semi align-middle',
                 Cell: ({ value }) => {

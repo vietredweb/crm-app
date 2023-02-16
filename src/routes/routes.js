@@ -11,28 +11,20 @@ import React, { lazy } from 'react';
 const LoginPage = lazy(() => import('../containers/LoginPage'));
 
 const WelcomePage = lazy(() => import('../containers/WelcomePage'));
-const DashboardPageProvider = lazy(() => import('../containers/DashboardsPage'));
-const SubscriptionPage = lazy(() => import('../containers/SubscriptionPage'));
-const MembersListPage = lazy(() => import('../containers/MembersListPage'));
-const DataStreamPage = lazy(() => import('../containers/DataStreamPage'));
-const RegionCountryPage = lazy(() => import('../containers/RegionCountryPage'));
+// const DashboardPageProvider = lazy(() => import('../containers/DashboardsPage'));
 const SettingPage = lazy(() => import('containers/SettingPage'));
 const HelpCenterPage = lazy(() => import('containers/HelpCenterPage'));
 const EditProductProvider = lazy(() => import('containers/EmailPage/edit'));
-const EditCategoryProvider = lazy(() => import('containers/CategoriesPage/edit'));
-const EditFieldProvider = lazy(() => import('containers/FieldsPage/edit'));
-const EditFieldGroupProvider = lazy(() => import('containers/FieldsGroupPage/edit'));
+const EditCompanyProvider = lazy(() => import('containers/CompanyPage/edit'));
+const EditFContactGroupProvider = lazy(() => import('containers/ContactGroupPage/edit'));
 const DigitalAssetsPage = lazy(() => import('containers/DigitalAssetsPage'));
-const EditDebtorGroupProvider = lazy(() => import('containers/DebtorGroupPage/edit'));
-const EditProductPriceProvider = lazy(() => import('containers/ProductPricesPage/edit'));
+const EditContactProvider = lazy(() => import('containers/ContactPage/edit'));
 
 const ProfilePage = lazy(() => import('../containers/ProfilePage'));
-const ProductsPage = lazy(() => import('../containers/EmailPage'));
-const ProductPrice = lazy(() => import('../containers/ProductPricesPage'));
-const CategoriesPage = lazy(() => import('../containers/CategoriesPage'));
-const FieldsPage = lazy(() => import('../containers/FieldsPage'));
-const DebtorGroupPage = lazy(() => import('../containers/DebtorGroupPage'));
-const FieldsGroupPage = lazy(() => import('../containers/FieldsGroupPage'));
+const EmailPage = lazy(() => import('../containers/EmailPage'));
+const CategoriesPage = lazy(() => import('../containers/CompanyPage'));
+const ContactPage = lazy(() => import('../containers/ContactPage'));
+const ContactGroupPage = lazy(() => import('../containers/ContactGroupPage'));
 
 const authRoutes = [
   {
@@ -46,42 +38,22 @@ const mainRoutes = [
   {
     path: ['/'],
     exact: true,
-    main: () => <DashboardPageProvider />,
+    main: () => <EmailPage />,
   },
   {
     path: ['/email', '/email/all'],
     exact: true,
-    main: () => <ProductsPage />,
+    main: () => <EmailPage />,
   },
   {
-    path: ['/categories', '/categories'],
+    path: ['/company', '/company'],
     exact: true,
     main: () => <CategoriesPage />,
-  },
-  {
-    path: '/subscription',
-    exact: true,
-    main: () => <SubscriptionPage />,
-  },
-  {
-    path: '/members-list',
-    exact: true,
-    main: () => <MembersListPage />,
-  },
-  {
-    path: '/data-stream',
-    exact: true,
-    main: () => <DataStreamPage />,
   },
   {
     path: ['/setting', '/setting/configuration'],
     exact: true,
     main: () => <SettingPage />,
-  },
-  {
-    path: '/region-country',
-    exact: true,
-    main: () => <RegionCountryPage />,
   },
   {
     path: '/help-center',
@@ -99,44 +71,29 @@ const mainRoutes = [
     main: () => <EditProductProvider />,
   },
   {
-    path: '/categories/edit/:id',
+    path: '/company/edit/:id',
     exact: true,
-    main: ({ match }) => <EditCategoryProvider match={match} />,
+    main: ({ match }) => <EditCompanyProvider match={match} />,
   },
   {
-    path: '/categories/add',
+    path: '/company/add',
     exact: true,
-    main: () => <EditCategoryProvider />,
+    main: () => <EditCompanyProvider />,
   },
   {
-    path: '/fields',
+    path: '/contact-groups',
     exact: true,
-    main: () => <FieldsPage />,
+    main: () => <ContactGroupPage />,
   },
   {
-    path: '/fields/edit/:id',
+    path: '/contact-groups/edit/:id',
     exact: true,
-    main: ({ match }) => <EditFieldProvider match={match} />,
+    main: ({ match }) => <EditFContactGroupProvider match={match} />,
   },
   {
-    path: '/fields/add',
+    path: '/contact-groups/add',
     exact: true,
-    main: () => <EditFieldProvider />,
-  },
-  {
-    path: '/fields-group',
-    exact: true,
-    main: () => <FieldsGroupPage />,
-  },
-  {
-    path: '/fields-group/edit/:id',
-    exact: true,
-    main: ({ match }) => <EditFieldGroupProvider match={match} />,
-  },
-  {
-    path: '/fields-group/add',
-    exact: true,
-    main: () => <EditFieldGroupProvider />,
+    main: () => <EditFContactGroupProvider />,
   },
   {
     path: '/dam',
@@ -144,34 +101,19 @@ const mainRoutes = [
     main: () => <DigitalAssetsPage />,
   },
   {
-    path: '/debtor-group',
+    path: '/contacts',
     exact: true,
-    main: () => <DebtorGroupPage />,
+    main: () => <ContactPage />,
   },
   {
-    path: '/debtor-group/edit/:id',
+    path: '/contacts/edit/:id',
     exact: true,
-    main: ({ match }) => <EditDebtorGroupProvider match={match} />,
+    main: ({ match }) => <EditContactProvider match={match} />,
   },
   {
-    path: '/debtor-group/add',
+    path: '/contacts/add',
     exact: true,
-    main: () => <EditDebtorGroupProvider />,
-  },
-  {
-    path: ['/prices'],
-    exact: true,
-    main: () => <ProductPrice />,
-  },
-  {
-    path: '/prices/edit/:id',
-    exact: true,
-    main: ({ match }) => <EditProductPriceProvider match={match} />,
-  },
-  {
-    path: '/prices/add',
-    exact: true,
-    main: () => <EditProductPriceProvider />,
+    main: () => <EditContactProvider />,
   },
 ];
 

@@ -10,7 +10,7 @@ import { withTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import PAGE_STATUS from 'constants/PageStatus';
 import { withRouter } from 'react-router-dom';
-import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import '../index.scss';
 import ActionsBar from 'components/ActionsBar';
 import CommonInformation from './Component/CommonInformation';
@@ -18,32 +18,27 @@ import { withEmailViewModel } from 'containers/EmailPage/EmailViewModel/EmailVie
 import PublishOptions from 'components/PublishOptions';
 import { PIM_FIELD_DETAIL_FIELD_KEY, PIM_PRODUCT_DETAIL_FIELD_KEY } from 'aesirx-dma-lib';
 import Input from 'components/Form/Input';
-import ProductInformation from './Component/ProductInformation';
-import FieldsTab from './Component/Fields';
-// import Variants from '../Component/Variants';
 import SimpleReactValidator from 'simple-react-validator';
-import CategoryStore from 'containers/CategoriesPage/CategoryStore/CategoryStore';
-import CategoryViewModel from 'containers/CategoriesPage/CategoryViewModel/CategoryViewModel';
+import CategoryStore from 'containers/CompanyPage/CompanyStore/CompanyStore';
+import CategoryViewModel from 'containers/CompanyPage/CompanyViewModel/CompanyViewModel';
 import _ from 'lodash';
 import EditHeader from 'components/EditHeader';
 const categoryStore = new CategoryStore();
 const categoryViewModel = new CategoryViewModel(categoryStore);
 const EditEmail = observer(
   class EditEmail extends Component {
-    productDetailViewModel = null;
+    emailDetailViewModel = null;
     formPropsData = { [PIM_FIELD_DETAIL_FIELD_KEY.CUSTOM_FIELDS]: {} };
     isEdit = false;
     constructor(props) {
       super(props);
       this.state = { key: 'commonInformation', requiredField: '' };
       this.viewModel = props.viewModel ? props.viewModel : null;
-      this.productDetailViewModel = this.viewModel
-        ? this.viewModel.getProductDetailViewModel()
-        : null;
+      this.emailDetailViewModel = this.viewModel ? this.viewModel.getEmailDetailViewModel() : null;
       this.categoryListViewModel = categoryViewModel
         ? categoryViewModel.getCategoryListViewModel()
         : null;
-      this.productDetailViewModel.setForm(this);
+      this.emailDetailViewModel.setForm(this);
       this.validator = new SimpleReactValidator({ autoForceUpdate: this });
       this.isEdit = props.match.params?.id ? true : false;
     }
@@ -51,7 +46,7 @@ const EditEmail = observer(
     async componentDidMount() {
       if (this.isEdit) {
         this.formPropsData[PIM_PRODUCT_DETAIL_FIELD_KEY.ID] = this.props.match.params?.id;
-        await this.productDetailViewModel.initializeData();
+        await this.emailDetailViewModel.initializeData();
       }
       await this.categoryListViewModel.handleFilter({ limit: 0 });
       await this.categoryListViewModel.initializeDataCustom();
@@ -59,21 +54,21 @@ const EditEmail = observer(
 
     handleAliasFormPropsData() {
       if (
-        !this.productDetailViewModel.productDetailViewModel.formPropsData[
+        !this.emailDetailViewModel.emailDetailViewModel.formPropsData[
           PIM_PRODUCT_DETAIL_FIELD_KEY.ALIAS
         ]
       ) {
-        this.productDetailViewModel.productDetailViewModel.formPropsData[
+        this.emailDetailViewModel.emailDetailViewModel.formPropsData[
           PIM_PRODUCT_DETAIL_FIELD_KEY.ALIAS
-        ] = this.productDetailViewModel.aliasChange;
+        ] = this.emailDetailViewModel.aliasChange;
       }
     }
     debouncedChangeHandler = _.debounce((value) => {
-      this.productDetailViewModel.handleAliasChange(value);
+      this.emailDetailViewModel.handleAliasChange(value);
     }, 300);
 
     handleValidateForm() {
-      if (this.validator.fields['Product Name'] === true) {
+      if (this.validator.fields['Email Name'] === true) {
         this.setState((prevState) => {
           return {
             ...prevState,
@@ -92,7 +87,7 @@ const EditEmail = observer(
       }
       return (
         <div className="py-4 px-3 h-100 d-flex flex-column">
-          {this.productDetailViewModel.formStatus === PAGE_STATUS.LOADING && (
+          {this.emailDetailViewModel.formStatus === PAGE_STATUS.LOADING && (
             <Spinner className="spinner-overlay" />
           )}
           <div className="d-flex align-items-center justify-content-between mb-24 flex-wrap">
@@ -100,7 +95,7 @@ const EditEmail = observer(
               props={this.props}
               title={t('txt_email')}
               isEdit={this.isEdit}
-              redirectUrl={'/products/all'}
+              redirectUrl={'/email/all'}
             />
             <div className="position-relative">
               <ActionsBar
@@ -108,50 +103,38 @@ const EditEmail = observer(
                   {
                     title: t('txt_cancel'),
                     handle: async () => {
-                      history.push(`/products/all`);
+                      history.push(`/email/all`);
                     },
                     icon: '/assets/images/cancel.svg',
                   },
-                  // {
-                  //   title: t('txt_preview'),
-                  //   handle: () => {},
-                  //   icon: '/assets/images/preview.svg',
-                  // },
                   {
-                    title: t('txt_save_close'),
-                    handle: async () => {
-                      if (this.validator.allValid()) {
-                        this.handleAliasFormPropsData();
-                        const result = this.isEdit
-                          ? await this.productDetailViewModel.update()
-                          : await this.productDetailViewModel.create();
-                        if (result !== 0) {
-                          history.push(`/products/all`);
-                        }
-                      } else {
-                        this.handleValidateForm();
-                      }
-                    },
+                    title: t('txt_preview'),
+                    handle: () => {},
+                    icon: '/assets/images/preview.svg',
                   },
                   {
-                    title: t('txt_save'),
+                    title: t('txt_send_a_test'),
+                    handle: () => {},
+                  },
+                  {
+                    title: t('txt_send_email'),
                     validator: this.validator,
                     handle: async () => {
                       if (this.validator.allValid()) {
                         this.handleAliasFormPropsData();
                         if (this.isEdit) {
-                          await this.productDetailViewModel.update();
-                          await this.productDetailViewModel.initializeData();
+                          await this.emailDetailViewModel.update();
+                          await this.emailDetailViewModel.initializeData();
                           this.forceUpdate();
                         } else {
-                          let result = await this.productDetailViewModel.create();
-                          result && history.push(`/products/edit/${result}`);
+                          let result = await this.emailDetailViewModel.create();
+                          result && history.push(`/email/edit/${result}`);
                         }
                       } else {
                         this.handleValidateForm();
                       }
                     },
-                    icon: '/assets/images/save.svg',
+                    icon: '/assets/images/send-email.png',
                     variant: 'success',
                   },
                 ]}
@@ -165,17 +148,17 @@ const EditEmail = observer(
                   <Input
                     field={{
                       getValueSelected:
-                        this.productDetailViewModel.productDetailViewModel.formPropsData[
+                        this.emailDetailViewModel.emailDetailViewModel.formPropsData[
                           PIM_PRODUCT_DETAIL_FIELD_KEY.TITLE
                         ],
                       classNameInput: 'py-1 fs-4',
-                      placeholder: t('txt_add_product_name'),
+                      placeholder: t('txt_mail_name'),
                       handleChange: (event) => {
-                        this.productDetailViewModel.productDetailViewModel.formPropsData[
+                        this.emailDetailViewModel.emailDetailViewModel.formPropsData[
                           PIM_PRODUCT_DETAIL_FIELD_KEY.TITLE
                         ] = event.target.value;
                         if (
-                          !this.productDetailViewModel.productDetailViewModel.formPropsData[
+                          !this.emailDetailViewModel.emailDetailViewModel.formPropsData[
                             PIM_PRODUCT_DETAIL_FIELD_KEY.ALIAS
                           ]
                         ) {
@@ -184,13 +167,13 @@ const EditEmail = observer(
                       },
                       required: true,
                       blurred: () => {
-                        this.validator.showMessageFor('Product Name');
+                        this.validator.showMessageFor('Email Name');
                       },
                     }}
                   />
                   {this.validator.message(
-                    'Product Name',
-                    this.productDetailViewModel.productDetailViewModel.formPropsData[
+                    'Email Name',
+                    this.emailDetailViewModel.emailDetailViewModel.formPropsData[
                       PIM_PRODUCT_DETAIL_FIELD_KEY.TITLE
                     ],
                     'required',
@@ -199,55 +182,16 @@ const EditEmail = observer(
                     }
                   )}
                 </Form.Group>
-                <Tabs
-                  activeKey={this.state.key}
-                  id="tab-setting"
-                  onSelect={(k) =>
-                    this.setState((prevState) => {
-                      return {
-                        ...prevState,
-                        key: k,
-                      };
-                    })
-                  }
-                >
-                  <Tab eventKey="commonInformation" title={t('txt_common_information')}>
-                    {this.state.key === 'commonInformation' && (
-                      <CommonInformation
-                        formPropsData={this.formPropsData}
-                        validator={this.validator}
-                        categoryListViewModel={this.categoryListViewModel}
-                      />
-                    )}
-                  </Tab>
-                  <Tab eventKey="productInformation" title={t('txt_product_information')}>
-                    <ProductInformation
-                      formPropsData={this.formPropsData}
-                      validator={this.validator}
-                      categoryListViewModel={this.categoryListViewModel}
-                    />
-                  </Tab>
-                  <Tab eventKey="fields" title={t('txt_fields')}>
-                    <FieldsTab
-                      detailViewModal={this.productDetailViewModel}
-                      formPropsData={
-                        this.productDetailViewModel.productDetailViewModel.formPropsData
-                      }
-                      validator={this.validator}
-                      requiredField={this.state.requiredField}
-                    />
-                  </Tab>
-                  {/* <Tab key="variants" eventKey="variants" title={t('txt_variants')}>
-                    {this.state.key === 'variants' && (
-                      <Variants formPropsData={this.formPropsData} validator={this.validator} />
-                    )}
-                  </Tab> */}
-                </Tabs>
+                <CommonInformation
+                  formPropsData={this.formPropsData}
+                  validator={this.validator}
+                  categoryListViewModel={this.categoryListViewModel}
+                />
               </Col>
               <Col xxl={3} lg={4}>
                 <PublishOptions
-                  detailViewModal={this.productDetailViewModel}
-                  formPropsData={this.productDetailViewModel.productDetailViewModel.formPropsData}
+                  detailViewModal={this.emailDetailViewModel}
+                  formPropsData={this.emailDetailViewModel.emailDetailViewModel.formPropsData}
                   isEdit={this.isEdit}
                 />
               </Col>

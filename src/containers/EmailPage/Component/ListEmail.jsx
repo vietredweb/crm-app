@@ -71,7 +71,7 @@ const List = observer((props) => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-start mb-3">
-        <h2 className="fw-bold mb-0">{t('txt_title_product_management')}</h2>
+        <h2 className="fw-bold mb-0">{t('txt_left_menu_list_email')}</h2>
         <ActionsBar
           buttons={[
             {
@@ -84,7 +84,7 @@ const List = observer((props) => {
               },
             },
             {
-              title: t('txt_add_new'),
+              title: t('txt_create_new') + ' ' + t('txt_email'),
               icon: '/assets/images/plus.svg',
               variant: 'success',
               handle: async () => {
@@ -162,26 +162,10 @@ const List = observer((props) => {
               accessor: 'productInfo',
               width: 300,
               className: 'py-18 text-gray border-bottom-1 text-uppercase fw-semi align-middle',
-              Cell: ({ value, row }) => {
+              Cell: ({ value }) => {
                 return (
                   <div className="d-flex align-items-center">
-                    <div>
-                      <div className="mb-1">{value.name}</div>
-                      <div className="text-green">
-                        <button
-                          onClick={() => {
-                            history.push(`/email/edit/${row.values.id}`);
-                          }}
-                          className="p-0 border-0 bg-transparent d-inline-block text-green"
-                        >
-                          {t('txt_edit')}
-                        </button>{' '}
-                        {/* |{' '}
-                        <button className="p-0 border-0 bg-transparent d-inline-block text-green">
-                          Duplicate
-                        </button> */}
-                      </div>
-                    </div>
+                    <div>{value.name}</div>
                   </div>
                 );
               },

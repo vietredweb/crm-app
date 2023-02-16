@@ -3,8 +3,6 @@ import { PIM_PRODUCT_DETAIL_FIELD_KEY } from 'aesirx-dma-lib';
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import { renderingGroupFieldHandler } from 'utils/form';
-// import TagStore from 'containers/ProductsPage/TagStore/TagStore';
-// import TagViewModel from 'containers/ProductsPage/TagViewModel/TagViewModel';
 import Spinner from 'components/Spinner';
 import PAGE_STATUS from 'constants/PageStatus';
 import { observer } from 'mobx-react';
@@ -16,7 +14,7 @@ const CommonInformation = observer(
   class CommonInformation extends Component {
     constructor(props) {
       super(props);
-      this.viewModel = this.props.viewModel.productDetailViewModel;
+      this.viewModel = this.props.viewModel.emailDetailViewModel;
       this.categoryListViewModel = this.props.categoryListViewModel;
       // this.tagListViewModel = tagViewModel ? tagViewModel.getTagListViewModel() : null;
     }
@@ -35,13 +33,13 @@ const CommonInformation = observer(
               key: PIM_PRODUCT_DETAIL_FIELD_KEY.ALIAS,
               type: FORM_FIELD_TYPE.INPUT,
               getValueSelected:
-                this.viewModel.productDetailViewModel.formPropsData[
+                this.viewModel.emailDetailViewModel.formPropsData[
                   PIM_PRODUCT_DETAIL_FIELD_KEY.ALIAS
                 ],
               className: 'col-lg-12',
               placeholder: this.viewModel.aliasChange ? this.viewModel.aliasChange : t('txt_type'),
               handleChange: (event) => {
-                this.viewModel.productDetailViewModel.formPropsData[
+                this.viewModel.emailDetailViewModel.formPropsData[
                   PIM_PRODUCT_DETAIL_FIELD_KEY.ALIAS
                 ] = event.target.value;
               },
@@ -50,16 +48,16 @@ const CommonInformation = observer(
               label: 'txt_main_category',
               key: PIM_PRODUCT_DETAIL_FIELD_KEY.CATEGORY_ID,
               type: FORM_FIELD_TYPE.SELECTION,
-              getValueSelected: this.viewModel.productDetailViewModel.formPropsData[
+              getValueSelected: this.viewModel.emailDetailViewModel.formPropsData[
                 PIM_PRODUCT_DETAIL_FIELD_KEY.CATEGORY_ID
               ]
                 ? {
                     label:
-                      this.viewModel.productDetailViewModel.formPropsData[
+                      this.viewModel.emailDetailViewModel.formPropsData[
                         PIM_PRODUCT_DETAIL_FIELD_KEY.CATEGORY_NAME
                       ],
                     value:
-                      this.viewModel.productDetailViewModel.formPropsData[
+                      this.viewModel.emailDetailViewModel.formPropsData[
                         PIM_PRODUCT_DETAIL_FIELD_KEY.CATEGORY_ID
                       ],
                   }
@@ -76,10 +74,10 @@ const CommonInformation = observer(
                   })
                 : null,
               handleChange: (data) => {
-                this.viewModel.productDetailViewModel.formPropsData[
+                this.viewModel.emailDetailViewModel.formPropsData[
                   PIM_PRODUCT_DETAIL_FIELD_KEY.CATEGORY_NAME
                 ] = data.label;
-                this.viewModel.productDetailViewModel.formPropsData[
+                this.viewModel.emailDetailViewModel.formPropsData[
                   PIM_PRODUCT_DETAIL_FIELD_KEY.CATEGORY_ID
                 ] = data.value;
               },

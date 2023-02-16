@@ -107,7 +107,7 @@ const Dashboard = observer(
                   </Col>
                   <Col lg={6}>
                     <ComponentCard
-                      title={t('txt_categories')}
+                      title={t('txt_companies')}
                       icon={'/assets/images/categories.svg'}
                       iconColor={'#EF3737'}
                       value={numberWithCommas(
@@ -120,7 +120,7 @@ const Dashboard = observer(
                         .subtract(1, 'months')
                         .format('MMMM')}`}
                       titleLink={t('txt_manage_categories')}
-                      link={'/categories'}
+                      link={'/company'}
                     ></ComponentCard>
                   </Col>
                 </Row>
